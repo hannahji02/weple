@@ -25,17 +25,6 @@ button{font-family:inherit;cursor:pointer}
 .num{font-family:var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
 .hidden{display:none !important}
 
-#gate{position:fixed;inset:0;background:var(--paper);display:flex;align-items:center;justify-content:center;padding:24px;z-index:50}
-.gate-box{width:100%;max-width:340px;text-align:center}
-.gate-mark{font-size:12px;letter-spacing:.34em;color:var(--muted);font-weight:600}
-.gate-title{font-family:var(--serif);font-size:30px;margin:14px 0 4px;font-weight:700;letter-spacing:-.03em}
-.gate-sub{color:var(--muted);font-size:13.5px;margin-bottom:28px}
-#code{width:100%;padding:14px;border:1px solid var(--line);border-radius:10px;background:var(--card);
-  font-family:var(--mono);font-size:22px;text-align:center;letter-spacing:.5em;text-indent:.5em}
-.btn{width:100%;margin-top:10px;padding:13px;border:0;border-radius:10px;background:var(--ink);color:#fff;font-size:14.5px;font-weight:600}
-.btn:disabled{opacity:.45}
-.gate-msg{min-height:20px;margin-top:12px;font-size:13px;color:var(--out)}
-
 .wrap{max-width:1080px;margin:0 auto;padding:26px 18px 80px}
 header.top{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;justify-content:space-between;margin-bottom:6px}
 .brand{font-family:var(--serif);font-size:20px;font-weight:700;letter-spacing:-.03em}
@@ -103,6 +92,35 @@ tbody tr:last-child td{border-bottom:0}
   .cell .a{font-size:11.5px} .cell .c{display:none} .wk{height:60px;font-size:10.5px}
 }
 
+/* 메모 */
+.notes{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:12px;margin-bottom:16px}
+.note{position:relative;border-radius:14px;padding:12px 14px 28px;font-size:13.5px;line-height:1.6;
+  border:1px solid rgba(0,0,0,.05);box-shadow:0 1px 0 rgba(0,0,0,.04),0 8px 16px -12px rgba(0,0,0,.3)}
+.note:nth-child(3n+1){background:#FFF8E2;transform:rotate(-.5deg)}
+.note:nth-child(3n+2){background:#EEF6F1;transform:rotate(.45deg)}
+.note:nth-child(3n+3){background:#FCF0F4;transform:rotate(-.28deg)}
+.note::after{content:'';position:absolute;right:0;bottom:0;width:15px;height:15px;border-radius:0 0 14px 0;
+  background:linear-gradient(135deg,transparent 50%,rgba(0,0,0,.07) 50%)}
+.note .who{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.note .nm{font-size:11.5px;font-weight:700;color:var(--ink)}
+.note .tm{font-size:10.5px;color:var(--muted);margin-left:auto;font-variant-numeric:tabular-nums}
+.note .bd{white-space:pre-wrap;word-break:break-word;color:#2B2E36}
+.note .x{position:absolute;right:7px;bottom:5px;border:0;background:none;font-size:11px;color:var(--muted);opacity:.5;padding:2px 4px}
+.note .x:hover{opacity:1;color:var(--out)}
+.av{width:19px;height:19px;border-radius:50%;color:#fff;font-size:11px;font-weight:700;
+  display:inline-grid;place-items:center;flex:0 0 auto}
+.note-empty{font-size:13px;color:var(--muted);background:#FAFAF7;border:1px dashed var(--line);
+  border-radius:12px;padding:20px;text-align:center;margin:0 0 16px}
+.nf{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end}
+.nf textarea{flex:1;min-width:210px;min-height:58px;resize:vertical;padding:10px 12px;font:inherit;
+  font-size:13.5px;border:1px solid var(--line);border-radius:11px;background:var(--card);color:var(--ink)}
+.nf textarea:focus{outline:2px solid var(--ink);outline-offset:1px}
+.pill{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:5px 11px;font-size:12px;color:var(--muted)}
+.pill[aria-pressed="true"]{color:#fff;border-color:transparent;font-weight:600}
+.memo-mini{display:flex;align-items:flex-start;gap:5px;background:#FFF8E2;border-radius:8px;
+  padding:3px 8px;font-size:11.5px;color:#6A5A22;margin-top:4px;line-height:1.5}
+.memo-mini .av{width:15px;height:15px;font-size:9px;margin-top:1px}
+
 #drop{border:1.5px dashed var(--line);border-radius:var(--r);padding:38px 20px;text-align:center;background:var(--card)}
 #drop.hot{border-color:var(--ink);background:#FCFCFA}
 #drop p{margin:0 0 4px;font-size:14.5px}
@@ -118,7 +136,6 @@ input[type=text],select.inp{padding:9px 11px;border:1px solid var(--line);border
 </style>
 </head>
 <body>
-
 
 <div class="wrap" id="app">
   <header class="top">
@@ -148,7 +165,7 @@ input[type=text],select.inp{padding:9px 11px;border:1px solid var(--line);border
   <section id="v-upload" class="hidden">
     <div class="card">
       <h2 class="sec-h">월말 CSV 올리기</h2>
-      <p class="sec-d">위플 가계부 CSV를 올리세요. 이미 저장된 내역은 자동으로 건너뜁니다.</p>
+      <p class="sec-d">위플 가계부에서 내보낸 CSV를 그대로 올리세요. 이미 저장된 내역은 자동으로 건너뜁니다.</p>
       <div id="drop">
         <p>여기에 CSV를 끌어다 놓기</p>
         <small>또는</small><br>
@@ -180,9 +197,9 @@ const CONFIG = {
   SUPABASE_URL : 'https://xdopcdosageizabazuvg.supabase.co',
   SUPABASE_KEY : 'sb_publishable_YyGMlbRUCbQv1jTp4LNmSw_5LcK_apL',
 
-
   /* 급여월 경계일. 이 날부터 다음 달 (CUT_DAY-1)일까지를 한 기간으로 봅니다.
      23 = 7월 23일 ~ 8월 22일 을 '8월분'으로 집계.
+     급여가 주말이면 23~24일에 조기 입금되는 경우가 있어 23으로 잡았습니다.
      정확히 25일 기준을 원하면 25로 바꾸세요. */
   CUT_DAY : 23
 };
@@ -195,7 +212,8 @@ const CUT = CONFIG.CUT_DAY;
 const TODAY = new Date().toISOString().slice(0,10);
 
 let sb = null;
-const S = { rows:[], rules:[], month:null, base:'mom', exTransfer:true, sameDays:true, calDay:null };
+const S = { rows:[], rules:[], notes:[], month:null, base:'mom', exTransfer:true, sameDays:true, calDay:null,
+            noteAuthor:'혜은', noteOpen:null };
 
 const won  = n => new Intl.NumberFormat('ko-KR').format(Math.round(n));
 const wonS = n => (n>0?'+':n<0?'−':'') + won(Math.abs(n));
@@ -233,7 +251,7 @@ boot();
 
 /* ---------- 데이터 ---------- */
 async function boot(){
-  await Promise.all([loadRows(), loadRules()]);
+  await Promise.all([loadRows(), loadRules(), loadNotes()]);
   const ms = months();
   S.month = ms.find(m => m <= periodKey(TODAY)) || ms[0] || periodKey(TODAY);
   buildMonthSel(); bindTabs(); bindUpload(); render();
@@ -252,6 +270,70 @@ async function loadRows(){
 }
 async function loadRules(){ const { data } = await sb.from('owner_rules').select('*').order('keyword'); S.rules = data || []; }
 const months = () => [...new Set(S.rows.map(r=>r.m))].sort().reverse();
+
+/* ---------- 메모 ---------- */
+async function loadNotes(){
+  const { data } = await sb.from('notes').select('*').order('created_at',{ascending:false});
+  S.notes = data || [];
+}
+const notesFor = (t,k) => S.notes.filter(n => n.target_type===t && n.target_key===k);
+const AV = o => `<span class="av" style="background:${OWNER_COLOR[o]}">${o.slice(0,1)}</span>`;
+function ago(ts){
+  const s = (Date.now() - new Date(ts)) / 1000;
+  if(s < 60) return '방금';
+  if(s < 3600) return Math.floor(s/60)+'분 전';
+  if(s < 86400) return Math.floor(s/3600)+'시간 전';
+  if(s < 86400*7) return Math.floor(s/86400)+'일 전';
+  return new Date(ts).toLocaleDateString('ko-KR',{month:'numeric',day:'numeric'});
+}
+function noteEl(n){
+  return `<div class="note">
+    <div class="who">${AV(n.author)}<span class="nm">${esc(n.author)}</span><span class="tm">${ago(n.created_at)}</span></div>
+    <div class="bd">${esc(n.body)}</div>
+    <button class="x" data-delnote="${n.id}" title="지우기">지우기</button></div>`;
+}
+function noteForm(){
+  return `<div class="nf">
+    <div class="row" style="gap:5px">${OWNERS.map(o=>`<button class="pill" data-author="${o}"
+      style="${S.noteAuthor===o?`background:${OWNER_COLOR[o]}`:''}" aria-pressed="${S.noteAuthor===o}">${o}</button>`).join('')}</div>
+    <textarea class="nb" placeholder="예: 자동차 늘어난 건 타이어 4개 교체 때문. 다음 교체는 2028년쯤."></textarea>
+    <button class="mini ns">메모 남기기</button></div>`;
+}
+function notesCard(m){
+  const list = notesFor('period', m);
+  return `<div class="card">
+    <h2 class="sec-h">이번 기간 메모</h2>
+    <p class="sec-d">왜 늘었는지, 무엇을 바꿀지 적어두면 다음 달에 도움이 됩니다. 두 사람 모두 볼 수 있어요.</p>
+    <div class="notes">${list.map(noteEl).join('')}</div>
+    ${list.length ? '' : `<p class="note-empty">아직 메모가 없어요. 첫 메모를 남겨보세요.</p>`}
+    ${noteForm()}</div>`;
+}
+async function saveNote(type, key, body){
+  const { error } = await sb.from('notes').insert({ target_type:type, target_key:key, author:S.noteAuthor, body });
+  if(error){ alert('메모 저장 실패: '+error.message); return false; }
+  await loadNotes(); return true;
+}
+function bindNotes(box, type, key){
+  box.querySelectorAll('[data-author]').forEach(b => b.onclick = () => { S.noteAuthor = b.dataset.author; render(); });
+  box.querySelectorAll('[data-delnote]').forEach(b => b.onclick = async () => {
+    if(!confirm('이 메모를 지울까요?')) return;
+    await sb.from('notes').delete().eq('id', Number(b.dataset.delnote));
+    await loadNotes(); render();
+  });
+  const ta = box.querySelector('textarea.nb'), sv = box.querySelector('button.ns');
+  if(sv) sv.onclick = async () => {
+    const v = (ta.value||'').trim(); if(!v) return ta.focus();
+    sv.disabled = true; sv.textContent = '저장 중…';
+    if(await saveNote(type, key, v)) render();
+    else { sv.disabled = false; sv.textContent = '메모 남기기'; }
+  };
+  if(ta) ta.onkeydown = e => { if((e.metaKey||e.ctrlKey) && e.key==='Enter') sv.click(); };
+  box.querySelectorAll('[data-memo]').forEach(b => b.onclick = () => {
+    ta.value = b.dataset.memo + ': '; ta.focus();
+    ta.setSelectionRange(ta.value.length, ta.value.length);
+    ta.scrollIntoView({block:'center', behavior:'smooth'});
+  });
+}
 
 function buildMonthSel(){
   const sel = el('monthSel'), ms = months();
@@ -330,7 +412,8 @@ function renderReport(){
   const dns = deltas.filter(x => x.d < -50000).slice(-2).reverse();
   const alerts = [
     ...ups.map(x => `<div class="alert"><b>${esc(x.c)}</b><span>${baseName}보다 <b class="num">${won(x.d)}원</b> 더 썼어요${
-      x.base ? ` (${(x.cur/x.base*100-100).toFixed(0)}% ↑)` : ' · 이번 기간 새로 생긴 지출'}</span></div>`),
+      x.base ? ` (${(x.cur/x.base*100-100).toFixed(0)}% ↑)` : ' · 이번 기간 새로 생긴 지출'}</span>
+      <button class="link" data-memo="${esc(x.c)}" style="margin-left:auto;white-space:nowrap">이유 적기</button></div>`),
     ...dns.map(x => `<div class="alert calm"><b>${esc(x.c)}</b><span>${baseName}보다 <b class="num">${won(-x.d)}원</b> 아꼈어요</span></div>`)
   ].join('') || `<div class="alert calm"><b>변화 없음</b><span>${baseName} 대비 크게 늘어난 항목이 없어요.</span></div>`;
 
@@ -363,6 +446,8 @@ function renderReport(){
     <div class="alerts">${alerts}</div>
     ${diverging(deltas.filter(x=>Math.abs(x.d)>=1000), max)}
   </div>
+
+  ${notesCard(m)}
 
   <div class="card">
     <h2 class="sec-h">기간별 흐름</h2>
@@ -398,6 +483,7 @@ function renderReport(){
   box.querySelectorAll('.seg button').forEach(b => b.onclick = () => { S.base = b.dataset.base; renderReport(); });
   const sd = el('sd'); if(sd) sd.onchange = () => { S.sameDays = sd.checked; render(); };
   const cb = el('exT'); if(cb) cb.onchange = () => { S.exTransfer = cb.checked; render(); };
+  bindNotes(box, 'period', m);
 }
 
 function diverging(list, max){
@@ -574,18 +660,31 @@ function renderList(){
   el('v-list').innerHTML = `<div class="card">
     <h2 class="sec-h">${labelY(S.month)} 내역</h2>
     <p class="sec-d">사람 칸을 바꾸면 그 건은 규칙보다 우선해 고정됩니다. ${rows.length}건</p>
-    <div class="scroll"><table><thead><tr><th>날짜</th><th>일차</th><th>내역</th><th>분류</th><th class="r">금액</th><th>사람</th></tr></thead><tbody>
+    <div class="scroll"><table><thead><tr><th>날짜</th><th>일차</th><th>내역</th><th>분류</th><th class="r">금액</th><th>사람</th><th>메모</th></tr></thead><tbody>
     ${rows.map(r=>`<tr><td class="num" style="color:var(--muted);white-space:nowrap">${r.txn_date.slice(5)}</td>
       <td class="num" style="color:var(--muted)">${r.di}</td>
-      <td>${esc(r.title||'')}</td><td style="color:var(--muted)">${esc(r.category||'')}</td>
+      <td>${esc(r.title||'')}
+        ${notesFor('ledger', r.fingerprint).map(n=>`<div class="memo-mini">${AV(n.author)}<span>${esc(n.body)}</span>
+          <button class="x" style="position:static;margin-left:auto;bottom:auto;right:auto" data-delnote="${n.id}">×</button></div>`).join('')}
+        ${S.noteOpen===r.fingerprint ? `<div class="nf" style="margin-top:6px">
+          <textarea class="nb" placeholder="이 지출에 남길 메모"></textarea><button class="mini ns">저장</button></div>` : ''}
+      </td><td style="color:var(--muted)">${esc(r.category||'')}</td>
       <td class="r num" style="color:${r.flow==='수입'?'var(--in)':'var(--ink)'}">${r.flow==='수입'?'+':''}${won(r.amount)}</td>
       <td><select class="inp" style="padding:3px 6px;font-size:12.5px;color:${OWNER_COLOR[r.owner]}" data-id="${r.id}">
-        ${OWNERS.map(o=>`<option ${o===r.owner?'selected':''}>${o}</option>`).join('')}</select></td></tr>`).join('')}
+        ${OWNERS.map(o=>`<option ${o===r.owner?'selected':''}>${o}</option>`).join('')}</select></td>
+      <td><button class="link" data-openmemo="${r.fingerprint}">${S.noteOpen===r.fingerprint?'닫기':'＋메모'}</button></td></tr>`).join('')}
     </tbody></table></div></div>`;
-  el('v-list').querySelectorAll('select[data-id]').forEach(s => s.onchange = async () => {
+  const lb = el('v-list');
+  lb.querySelectorAll('select[data-id]').forEach(s => s.onchange = async () => {
     await sb.from('ledger').update({owner:s.value, owner_locked:true}).eq('id', Number(s.dataset.id));
     const r = S.rows.find(x=>x.id===Number(s.dataset.id)); r.owner=s.value; r.owner_locked=true; render();
   });
+  lb.querySelectorAll('[data-openmemo]').forEach(b => b.onclick = () => {
+    S.noteOpen = (S.noteOpen === b.dataset.openmemo) ? null : b.dataset.openmemo;
+    renderList();
+    if(S.noteOpen) el('v-list').querySelector('textarea.nb')?.focus();
+  });
+  bindNotes(lb, 'ledger', S.noteOpen);
 }
 
 function renderRules(){
