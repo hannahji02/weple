@@ -119,20 +119,10 @@ input[type=text],select.inp{padding:9px 11px;border:1px solid var(--line);border
 </head>
 <body>
 
-<div id="gate">
-  <div class="gate-box">
-    <div class="gate-mark">HOUSEHOLD LEDGER</div>
-    <div class="gate-title">우리집 가계부</div>
-    <div class="gate-sub">입장 코드를 입력하세요.</div>
-    <input id="code" type="password" inputmode="numeric" autocomplete="off" maxlength="12" placeholder="••••">
-    <button class="btn" id="enter">들어가기</button>
-    <div class="gate-msg" id="gateMsg"></div>
-  </div>
-</div>
 
-<div class="wrap hidden" id="app">
+<div class="wrap" id="app">
   <header class="top">
-    <div class="brand"><span>HOUSEHOLD LEDGER</span>우리집 가계부</div>
+    <div class="brand"><span>HOUSEHOLD LEDGER</span>콩학 가계부</div>
     <div class="monthnav">
       <button id="prevM" aria-label="이전">‹</button>
       <select id="monthSel"></select>
@@ -158,7 +148,7 @@ input[type=text],select.inp{padding:9px 11px;border:1px solid var(--line);border
   <section id="v-upload" class="hidden">
     <div class="card">
       <h2 class="sec-h">월말 CSV 올리기</h2>
-      <p class="sec-d">위플 가계부에서 내보낸 CSV를 그대로 올리세요. 이미 저장된 내역은 자동으로 건너뜁니다.</p>
+      <p class="sec-d">위플 가계부 CSV를 올리세요. 이미 저장된 내역은 자동으로 건너뜁니다.</p>
       <div id="drop">
         <p>여기에 CSV를 끌어다 놓기</p>
         <small>또는</small><br>
@@ -178,7 +168,6 @@ input[type=text],select.inp{padding:9px 11px;border:1px solid var(--line);border
 
   <div class="foot">
     <span id="footStat"></span>
-    <button class="link" id="logout">나가기</button>
   </div>
 </div>
 
@@ -190,8 +179,7 @@ input[type=text],select.inp{padding:9px 11px;border:1px solid var(--line);border
 const CONFIG = {
   SUPABASE_URL : 'https://xdopcdosageizabazuvg.supabase.co',
   SUPABASE_KEY : 'sb_publishable_YyGMlbRUCbQv1jTp4LNmSw_5LcK_apL',
-  AUTH_EMAIL   : 'weple@family.app',   // Supabase에 만든 계정 이메일
-  PASS_PREFIX  : 'weple-',             // 실제 비밀번호 = PASS_PREFIX + 입장코드
+
 
   /* 급여월 경계일. 이 날부터 다음 달 (CUT_DAY-1)일까지를 한 기간으로 봅니다.
      23 = 7월 23일 ~ 8월 22일 을 '8월분'으로 집계.
@@ -239,25 +227,9 @@ function addP(key, n){
 const isPartial = key => { const [s,e] = periodRange(key); return TODAY >= s && TODAY < e; };
 const elapsed = key => isPartial(key) ? dayNo(TODAY, key) : periodLen(key);
 
-/* ---------- 입장 ---------- */
-el('enter').addEventListener('click', enter);
-el('code').addEventListener('keydown', e => { if(e.key==='Enter') enter(); });
-el('code').focus();
-
-async function enter(){
-  const code = el('code').value.trim(), msg = el('gateMsg');
-  if(!code){ msg.textContent='코드를 입력하세요.'; return; }
-  if(CONFIG.SUPABASE_KEY.includes('여기에')){ msg.textContent='index.html 상단 CONFIG를 먼저 채워주세요.'; return; }
-  el('enter').disabled = true; msg.textContent='확인 중…';
-  try{
-    sb = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
-    const { error } = await sb.auth.signInWithPassword({ email:CONFIG.AUTH_EMAIL, password:CONFIG.PASS_PREFIX+code });
-    if(error){ msg.textContent='코드가 맞지 않습니다.'; el('enter').disabled=false; return; }
-    el('gate').classList.add('hidden'); el('app').classList.remove('hidden');
-    await boot();
-  }catch(e){ msg.textContent='연결에 실패했습니다: '+e.message; el('enter').disabled=false; }
-}
-el('logout').addEventListener('click', async ()=>{ await sb.auth.signOut(); location.reload(); });
+/* ---------- 바로 시작 ---------- */
+sb = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
+boot();
 
 /* ---------- 데이터 ---------- */
 async function boot(){
