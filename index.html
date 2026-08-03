@@ -401,22 +401,24 @@ function renderReport(){
 /* 다이버징 막대 (시그니처) */
 function diverging(list, max){
   if(!list.length) return '<p class="sec-d">비교할 항목이 없습니다.</p>';
-  const H = 26, W = 680, mid = W*0.42;
+  const H=28, W=680, LAB=112, VAL=86;
+  const mid = LAB + (W-LAB-VAL)/2;
+  const half = (W-LAB-VAL)/2 - 6;
   const h = list.length*H + 24;
   const bars = list.map((x,i)=>{
-    const y = i*H + 18;
-    const w = Math.abs(x.d)/max * (x.d>0 ? W-mid-90 : mid-90);
+    const y = i*H + 20;
+    const w = Math.max(Math.abs(x.d)/max*half, 1.5);
     const bx = x.d>0 ? mid : mid-w;
     return `<g>
-      <text x="${mid-8}" y="${y+4}" text-anchor="end" font-size="12" fill="${x.d>0?'#1B1D24':'#71757F'}"
+      <text x="${LAB-12}" y="${y+4}" text-anchor="end" font-size="12.5" fill="var(--ink)"
         style="font-family:var(--sans)">${esc(x.c)}</text>
-      <rect x="${bx}" y="${y-8}" width="${Math.max(w,1)}" height="15" rx="3"
-        fill="${x.d>0?'var(--out)':'var(--in)'}" opacity="${x.d>0?0.85:0.5}"><title>${esc(x.c)} ${wonS(x.d)}원</title></rect>
-      <text x="${x.d>0? bx+w+6 : bx-6}" y="${y+4}" text-anchor="${x.d>0?'start':'end'}" font-size="11.5"
+      <rect x="${bx}" y="${y-7}" width="${w}" height="14" rx="3"
+        fill="${x.d>0?'var(--out)':'var(--in)'}" opacity="${x.d>0?.85:.45}"><title>${esc(x.c)} ${wonS(x.d)}원</title></rect>
+      <text x="${W-6}" y="${y+4}" text-anchor="end" font-size="11.5"
         fill="${x.d>0?'var(--out)':'var(--in)'}" style="font-family:var(--mono)">${wonS(x.d)}</text></g>`;
   }).join('');
-  return `<svg viewBox="0 0 ${W} ${h}" width="100%" height="${h}" role="img" aria-label="분류별 증감">
-    <line x1="${mid}" y1="6" x2="${mid}" y2="${h-8}" stroke="var(--line)"/>${bars}</svg>`;
+  return `<div style="overflow-x:auto"><svg viewBox="0 0 ${W} ${h}" style="min-width:560px" width="100%" height="${h}" role="img" aria-label="분류별 증감">
+    <line x1="${mid}" y1="6" x2="${mid}" y2="${h-8}" stroke="var(--line)"/>${bars}</svg></div>`;
 }
 
 /* 월별 추이 */
