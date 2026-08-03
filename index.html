@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>우리집 가계부</title>
+<title>콩학 가계부</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
 <style>
 :root{
@@ -191,13 +191,10 @@ const CONFIG = {
   SUPABASE_URL : 'https://xdopcdosageizabazuvg.supabase.co',
   SUPABASE_KEY : 'sb_publishable_YyGMlbRUCbQv1jTp4LNmSw_5LcK_apL',
   AUTH_EMAIL   : 'weple@family.app',   // Supabase에 만든 계정 이메일
-  PASS_PREFIX  : 'weple-'              // 실제 비밀번호 = PASS_PREFIX + 입장코드
-};
-/* ============================================================ */
-  
+  PASS_PREFIX  : 'weple-',             // 실제 비밀번호 = PASS_PREFIX + 입장코드
+
   /* 급여월 경계일. 이 날부터 다음 달 (CUT_DAY-1)일까지를 한 기간으로 봅니다.
      23 = 7월 23일 ~ 8월 22일 을 '8월분'으로 집계.
-     급여가 주말이면 23~24일에 조기 입금되는 경우가 있어 23으로 잡았습니다.
      정확히 25일 기준을 원하면 25로 바꾸세요. */
   CUT_DAY : 23
 };
